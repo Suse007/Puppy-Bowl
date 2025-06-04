@@ -34,7 +34,7 @@ const renderpuppiesList = () => {
     const li = document.createElement(`li`);
     li.addEventListener(`click`, async () => {
       //   li.innerText = puppy.name; this line everytime i click on a name of a puppy , the pic disapear
-      console.log(puppy.name);
+      //   console.log(puppy.name);
     });
 
     li.innerText = puppy.name;
@@ -49,8 +49,13 @@ const renderpuppiesList = () => {
     li.style.listStyleType = "none";
 
     li.addEventListener(`click`, async () => {
+      const response = await fetch(`${API}/${puppy.id}`);
+      const json = await response.json();
+      const player = json.data.player;
       //   li.innerText = puppy.name; this line everytime i click on a name of a puppy , the pic disapear
       //   console.log(puppy.name);
+
+      showModal(player);
     });
     // click on the name get me player details
     //     player details is :
@@ -70,3 +75,36 @@ const renderpuppiesList = () => {
   //   console.log($app);
   //   return $puppiesList;
 };
+function showModal(player) {
+  const modalCreate = document.createElement("div");
+  const content = document.createElement("div");
+  const close = document.createElement("button");
+  const imageUrl = document.createElement("img");
+  const breed = document.createElement("p");
+  const status = document.createElement("p");
+  const teamId = document.createElement("p");
+  const name = document.createElement("p");
+
+  /// call re using the tatle that we made here and give them content
+  close.textContent = "close";
+  name.textContent = `${player.name}`;
+  breed.textContent = `${player.breed}`;
+  status.textContent = `${player.status}`;
+  teamId.textContent = `${player.teamId}`;
+  imageUrl.src = player.imageUrl;
+
+  close.onclick = () => {
+    document.body.removeChild(modalCreate);
+  };
+  content.appendChild(imageUrl);
+  content.appendChild(breed);
+  content.appendChild(status);
+  content.appendChild(teamId);
+  content.appendChild(name);
+  content.appendChild(close);
+
+  modalCreate.appendChild(content);
+  document.body.appendChild(modalCreate);
+}
+
+getpuppies();
